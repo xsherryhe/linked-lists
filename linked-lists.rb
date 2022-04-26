@@ -56,7 +56,7 @@ class LinkedList
   end
 
   def pop
-    return if head.nil?
+    return self.head = nil if head.nil? || head.next_node.nil?
 
     prev = nil
     cur = head
@@ -87,14 +87,34 @@ class LinkedList
       cur_ind += 1
     end
   end
+
+  def to_s
+    string = ''
+    cur = head
+    until cur.nil?
+      string += "#{cur.value}->"
+      cur = cur.next_node
+    end
+    "#{string}nil"
+  end
+
+  def insert_at(value, index)
+    raise 'Invalid index' unless index.between?(0, size)
+
+    node = Node.new(value, at(index))
+    return self.head = node if index.zero?
+
+    at(index - 1).next_node = node
+  end
+
+  def remove_at(index)
+    raise 'Invalid index' unless index.between?(0, size)
+
+    if index.zero?
+      self.head = head.next_node if head
+      return
+    end
+
+    at(index - 1).next_node = at(index).next_node
+  end
 end
-
-node1 = Node.new(3)
-list = LinkedList.new(node1)
-list.prepend(5)
-list.prepend(6)
-p list.find(5)
-p list.find(7)
-
-nil_list = LinkedList.new
-p nil_list.find(5)
